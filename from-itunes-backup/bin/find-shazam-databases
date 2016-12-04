@@ -12,7 +12,7 @@ fi
 
 find "$BACKUP_DIR" -type f -print0 | gxargs -0 file | ggrep -i sqlite | cut -f1 -d: | gxargs -d'\n' gfgrep -l shazam.com | while read filename ; do
     if echo .tables | sqlite3 "$filename" | grep -i tag >/dev/null 2>/dev/null ; then
-        /bin/ls -l "$filename"
+        echo "$filename"
     fi
 done
 
