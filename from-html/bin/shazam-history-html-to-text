@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+use warnings;
+use strict;
+
+use HTML::TreeBuilder;
+use POSIX qw(strftime);
+use Time::ParseDate;
+
+my $tree = HTML::TreeBuilder->new();
+while (<>) {
+    $tree->parse($_);
+}
+$tree->eof();
+
+my %artist;
+my %title;
+my @songs;
+
+my @table = $tree->find_by_tag_name("table");
+foreach my $table (@table) {
+    my @tr = $table->find_by_tag_name("tr");
+    shift(@tr);                 # remove header
+    foreach my $tr (@tr) {
+        my @td = $tr->find_by_tag_name("td");
+        my ($title, $artist, $date) = @td;
+        $title = $title->as_text;
+        $artist = $artist->as_text;
+        $date = $date->as_text;
+        my $time = parsedate($date);
+        if ($time) {
+            $date = strftime("%Y-%m-%d %H:%M:%S", localtime($time));
+        }
+        print(join("\t", $date, $artist, $title), "\n");
+    }
+}
+
