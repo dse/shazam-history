@@ -1,6 +1,7 @@
 #!/bin/bash
 
-cat <<EOF | sqlite3 "$1"
+list () {
+    cat <<EOF | sqlite3 "$1"
 .mode tabs
 
 select
@@ -21,3 +22,10 @@ order by
   zshtagresultmo.zdate;
 
 EOF
+}
+
+for i ; do
+    list "$i"
+done
+
+
