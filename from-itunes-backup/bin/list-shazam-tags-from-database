@@ -19,7 +19,7 @@ from
 where
   zshtagresultmo.ztype in ('music', 'MUSIC')
 order by
-  zshtagresultmo.zdate;
+  zshtagresultmo.zdate desc;
 
 EOF
 }
