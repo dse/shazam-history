@@ -1,0 +1,23 @@
+#!/bin/bash
+
+cat <<EOF | sqlite3 "$1"
+.mode tabs
+
+select
+  datetime(zshtagresultmo.zdate + 978307200, 'unixepoch') as time,
+  zshartistmo.zname as artist,
+  zshtagresultmo.ztrackname as title,
+  zshmetadatamo.zvalue as album
+from
+  zshtagresultmo
+  left join zshartistmo
+    on zshtagresultmo.z_pk = zshartistmo.ztagresult
+  left join zshmetadatamo
+    on zshtagresultmo.z_pk = zshmetadatamo.ztagresult
+       and zshmetadatamo.zkey = 'Album'
+where
+  zshtagresultmo.ztype in ('music', 'MUSIC')
+order by
+  zshtagresultmo.zdate;
+
+EOF
